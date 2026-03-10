@@ -1,0 +1,132 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Admin | FedEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body data-page="admin">
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Página inicial da FedEx">
+        <img class="brand-logo-png" src="static/images/fedex-logo.png" alt="Logo da FedEx" />
+      </a>
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="ship.html">Enviar Agora</a>
+        <a href="world-map.html">Mapa ao Vivo</a>
+</nav>
+      <button class="btn btn-outline" id="admin-logout-btn" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container flash-wrap" id="flash-container"></div>
+
+    <section class="section">
+      <div class="container split">
+        <div class="panel">
+          <p class="eyebrow">Operações - Criar envio</p>
+          <h2>Registrar pacote manualmente</h2>
+          <form id="admin-create-form">
+            <div class="grid-two">
+              <label>Nome do remetente<input name="sender_name" required /></label>
+              <label>Email do remetente<input name="sender_email" type="email" /></label>
+              <label>Telefone do remetente<input name="sender_phone" /></label>
+              <label>Local de origem<input name="origin_label" required placeholder="Berlim, Alemanha" /></label>
+              <label>Latitude de origem<input name="origin_lat" type="number" step="any" required /></label>
+              <label>Longitude de origem<input name="origin_lng" type="number" step="any" required /></label>
+              <label>Nome do destinatário<input name="receiver_name" required /></label>
+              <label>Email do destinatário<input name="receiver_email" type="email" /></label>
+              <label>Telefone do destinatário<input name="receiver_phone" /></label>
+              <label>Local de destino<input name="destination_label" required placeholder="Paris, França" /></label>
+              <label>Latitude de destino<input name="destination_lat" type="number" step="any" required /></label>
+              <label>Longitude de destino<input name="destination_lng" type="number" step="any" required /></label>
+              <label>Peso (kg)<input name="weight_kg" type="number" min="0.1" step="0.1" required /></label>
+              <label>Serviço
+                <select name="service_level" required>
+                  <option value="same-day">Mesmo dia</option>
+                  <option value="express">Expresso</option>
+                  <option value="standard">Padrão</option>
+                  <option value="international">Internacional</option>
+                </select>
+              </label>
+            </div>
+            <label>Descrição da encomenda<input name="package_description" required /></label>
+            <button type="submit" class="btn">Criar envio</button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <p class="eyebrow">Operações - Atualizações de envio</p>
+          <h2>Alterar manualmente o status do pacote</h2>
+          <form id="admin-status-form">
+            <label>ID de rastreamento<input name="tracking_id" required placeholder="FDX-260306-A1B2C3D4" /></label>
+            <label>Status
+              <select name="status" required>
+                <option value="label-created">Etiqueta criada</option>
+                <option value="picked-up">Coletado</option>
+                <option value="in-transit">Em trânsito</option>
+                <option value="arrived-hub">Chegou ao hub</option>
+                <option value="out-for-delivery">Saiu para entrega</option>
+                <option value="delivered">Entregue</option>
+                <option value="exception">Exceção na entrega</option>
+              </select>
+            </label>
+            <label>Localização<input name="location_label" placeholder="Unidade de Chicago" /></label>
+            <label>Nota de atualização<input name="note" placeholder="Pacote escaneado na área de saída" /></label>
+            <button type="submit" class="btn">Aplicar atualização</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Envios registrados</p>
+          <h2>Pacotes mais recentes</h2>
+        </div>
+        <div class="panel table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID de rastreamento</th>
+                <th>De</th>
+                <th>Para</th>
+                <th>Status</th>
+                <th>Atualizado</th>
+                <th>Página de rastreamento</th>
+              </tr>
+            </thead>
+            <tbody id="admin-shipments-body">
+              <tr><td colspan="6">Nenhum envio ainda.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <p>© 2026 FedEx Logistics</p>
+      <p>Operações de envio, rastreamento e entrega</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+

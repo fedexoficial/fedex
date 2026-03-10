@@ -1,0 +1,70 @@
+﻿{% extends "base.html" %}
+{% block title %}{{ t('title.home', 'FedEx | Plataforma de Entregas') }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-media" aria-hidden="true"></div>
+  <div class="container hero-content">
+    <p class="eyebrow">{{ t('home.hero.eyebrow', 'Rede de entregas FedEx') }}</p>
+    <h1>{{ t('home.hero.title', 'Envie, rastreie e gerencie entregas em um portal no estilo FedEx') }}</h1>
+    <p>{{ t('home.hero.desc', 'Crie envios instantaneamente, gere um número de rastreamento exclusivo e acompanhe o progresso da rota da origem ao destino com eventos de status ao vivo.') }}</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('ship_page') }}" class="btn">{{ t('home.hero.ship_btn', 'Enviar Agora') }}</a>
+      <a href="{{ url_for('world_map') }}" class="btn btn-outline">{{ t('home.hero.map_btn', 'Ver Mapa ao Vivo') }}</a>
+    </div>
+    <div class="stats">
+      <article><h3>99,1%</h3><p>{{ t('home.stats.ontime', 'SLA no prazo') }}</p></article>
+      <article><h3>24/7</h3><p>{{ t('home.stats.support', 'Central de Suporte') }}</p></article>
+      <article><h3>{{ t('home.stats.live_title', 'Ao vivo') }}</h3><p>{{ t('home.stats.live_desc', 'Atualizações em tempo real') }}</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div>
+      <p class="eyebrow">{{ t('home.track.eyebrow', 'Rastrear Envio') }}</p>
+      <h2>{{ t('home.track.title', 'Abra a página completa de rastreamento pelo ID') }}</h2>
+      <p>{{ t('home.track.desc', 'Digite um ID de rastreamento para ver detalhes do pacote, eventos da linha do tempo e o mapa da rota.') }}</p>
+    </div>
+    <form class="panel" method="post" action="{{ url_for('track_lookup') }}">
+      <label>{{ t('form.tracking_number', 'Número de rastreamento') }}
+        <input name="tracking_id" placeholder="FDX-260306-A12BCD34" required />
+      </label>
+      <button type="submit" class="btn">{{ t('home.track.button', 'Rastrear pacote') }}</button>
+    </form>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container section-head">
+    <p class="eyebrow">{{ t('home.how.eyebrow', 'Como funciona') }}</p>
+    <h2>{{ t('home.how.title', 'Ciclo de vida completo da encomenda') }}</h2>
+  </div>
+  <div class="container service-grid">
+    <article class="service-card">
+      <img src="{{ url_for('static', filename='images/fedex-online-1.jpg') }}" alt="Operações da FedEx em Heathrow" />
+      <div>
+        <h3>{{ t('home.card.create.title', 'Criar um envio') }}</h3>
+        <p>{{ t('home.card.create.desc', 'Informe os dados do remetente e do destinatário e envie para gerar a etiqueta imediatamente.') }}</p>
+      </div>
+    </article>
+    <article class="service-card">
+      <img src="{{ url_for('static', filename='images/fedex-online-2.jpg') }}" alt="Caminhão da FedEx em serviço" />
+      <div>
+        <h3>{{ t('home.card.id.title', 'Gerar ID de rastreamento') }}</h3>
+        <p>{{ t('home.card.id.desc', 'O backend registra os dados do envio e cria um número de rastreamento exclusivo no estilo FedEx.') }}</p>
+      </div>
+    </article>
+    <article class="service-card">
+      <img src="{{ url_for('static', filename='images/fedex-online-3.jpg') }}" alt="Caminhões da FedEx na unidade" />
+      <div>
+        <h3>{{ t('home.card.update.title', 'Atualizações do progresso de entrega') }}</h3>
+        <p>{{ t('home.card.update.desc', 'Eventos de leitura automáticos e pontos de controle da rota mantêm os clientes informados da coleta à entrega final.') }}</p>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}
+
+
+

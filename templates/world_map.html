@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}{{ t('title.world_map', 'Mapa Mundial ao Vivo | FedEx') }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container split">
+    <div class="panel">
+      <p class="eyebrow">{{ t('world_map.eyebrow', 'Mapa global ao vivo') }}</p>
+      <h2>{{ t('world_map.title', 'Conecte quaisquer dois locais do mundo') }}</h2>
+      <p>{{ t('world_map.desc', 'Digite dois nomes de lugares e anime uma conexão de rota ao vivo entre eles.') }}</p>
+      <form id="map-link-form" class="map-controls" autocomplete="off">
+        <label>{{ t('world_map.from', 'De') }}
+          <input id="from-place" placeholder="Los Angeles, EUA" required />
+        </label>
+        <label>{{ t('world_map.to', 'Para') }}
+          <input id="to-place" placeholder="Tóquio, Japão" required />
+        </label>
+        <button type="submit" class="btn">{{ t('world_map.animate', 'Animar rota') }}</button>
+        <p id="map-feedback" class="hint"></p>
+      </form>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">{{ t('world_map.how', 'Como funciona') }}</p>
+      <h2>{{ t('world_map.how_title', 'Geocodificação + polilinha animada') }}</h2>
+      <ul class="feature-list">
+        <li>{{ t('world_map.bullet1', 'Pesquisa os dois locais usando a geocodificação do OpenStreetMap.') }}</li>
+        <li>{{ t('world_map.bullet2', 'Adiciona marcadores de origem e destino.') }}</li>
+        <li>{{ t('world_map.bullet3', 'Anima a rota conectada em tempo real.') }}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="panel">
+      <div id="world-map" class="map world"></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const map = L.map('world-map', { worldCopyJump: true }).setView([20, 0], 2);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const form = document.getElementById('map-link-form');
+  const fromInput = document.getElementById('from-place');
+  const toInput = document.getElementById('to-place');
+  const feedback = document.getElementById('map-feedback');
+
+  let originMarker = null;
+  let destinationMarker = null;
+  let activeLine = null;
+  let animatedLine = null;
+  let planeMarker = null;
+  let animationTimer = null;
+
+  async function geocode(place) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(place)}`;
+    const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!response.ok) {
+      throw new Error('{{ t("world_map.err_geocode_unavailable", "Serviço de geocodificação indisponível.") }}');
+    }
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error(`{{ t("world_map.err_place_not_found", "Local não encontrado:") }} ${place}`);
+    }
+    return {
+      lat: Number(data[0].lat),
+      lng: Number(data[0].lon),
+      label: data[0].display_name
+    };
+  }
+
+  function stopAnimation() {
+    if (animationTimer) {
+      cancelAnimationFrame(animationTimer);
+      animationTimer = null;
+    }
+  }
+
+  function clearRoute() {
+    stopAnimation();
+    if (originMarker) map.removeLayer(originMarker);
+    if (destinationMarker) map.removeLayer(destinationMarker);
+    if (activeLine) map.removeLayer(activeLine);
+    if (animatedLine) map.removeLayer(animatedLine);
+    if (planeMarker) map.removeLayer(planeMarker);
+    originMarker = null;
+    destinationMarker = null;
+    activeLine = null;
+    animatedLine = null;
+    planeMarker = null;
+  }
+
+  function animateRoute(from, to) {
+    const points = [];
+    const steps = 150;
+
+    for (let i = 0; i <= steps; i += 1) {
+      const t = i / steps;
+      points.push([
+        from.lat + (to.lat - from.lat) * t,
+        from.lng + (to.lng - from.lng) * t
+      ]);
+    }
+
+    activeLine = L.polyline([ [from.lat, from.lng], [to.lat, to.lng] ], {
+      color: '#4d148c',
+      weight: 2,
+      opacity: 0.35,
+      dashArray: '8 8'
+    }).addTo(map);
+
+    animatedLine = L.polyline([], {
+      color: '#ff6600',
+      weight: 4,
+      opacity: 0.95
+    }).addTo(map);
+
+    const planeIcon = L.divIcon({
+      className: 'plane-icon',
+      html: '&#9992;',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+    planeMarker = L.marker(points[0], { icon: planeIcon }).addTo(map);
+
+    let index = 0;
+    const draw = () => {
+      if (!animatedLine) return;
+      index = Math.min(index + 2, points.length);
+      animatedLine.setLatLngs(points.slice(0, index));
+      if (planeMarker && index > 0) {
+        planeMarker.setLatLng(points[index - 1]);
+      }
+      if (index < points.length) {
+        animationTimer = requestAnimationFrame(draw);
+      }
+    };
+
+    draw();
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const fromPlace = fromInput.value.trim();
+    const toPlace = toInput.value.trim();
+
+    if (!fromPlace || !toPlace) {
+      feedback.textContent = '{{ t("world_map.err_both_required", "Ambos os locais são obrigatórios.") }}';
+      return;
+    }
+
+    feedback.textContent = '{{ t("world_map.finding", "Buscando locais e desenhando a rota...") }}';
+
+    try {
+      clearRoute();
+      const [from, to] = await Promise.all([geocode(fromPlace), geocode(toPlace)]);
+
+      originMarker = L.marker([from.lat, from.lng]).addTo(map).bindPopup(`{{ t("world_map.from_popup", "De:") }} ${from.label}`);
+      destinationMarker = L.marker([to.lat, to.lng]).addTo(map).bindPopup(`{{ t("world_map.to_popup", "Para:") }} ${to.label}`);
+      map.fitBounds(L.latLngBounds([[from.lat, from.lng], [to.lat, to.lng]]).pad(0.35));
+
+      animateRoute(from, to);
+      feedback.textContent = `{{ t("world_map.route_linked", "Rota vinculada:") }} ${from.label} {{ t("word.to", "para") }} ${to.label}`;
+    } catch (error) {
+      feedback.textContent = error.message || '{{ t("world_map.err_generic", "Não foi possível vincular os locais agora.") }}';
+    }
+  });
+</script>
+{% endblock %}
+

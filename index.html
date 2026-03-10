@@ -1,0 +1,108 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FedEx | Plataforma de Entregas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body data-page="home">
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Página inicial da FedEx">
+        <img class="brand-logo-png" src="static/images/fedex-logo.png" alt="Logo da FedEx" />
+      </a>
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="ship.html">Enviar Agora</a>
+        <a href="world-map.html">Mapa ao Vivo</a>
+</nav>
+</div>
+  </header>
+
+  <main>
+    <div class="container flash-wrap" id="flash-container"></div>
+
+    <section class="hero">
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <p class="eyebrow">Rede de entregas FedEx</p>
+        <h1>Envie, rastreie e gerencie entregas em um portal no estilo FedEx</h1>
+        <p>Crie envios instantaneamente, gere um número de rastreamento exclusivo e acompanhe o progresso da rota da origem ao destino com eventos de status ao vivo.</p>
+        <div class="hero-actions">
+          <a href="ship.html" class="btn">Enviar Agora</a>
+</div>
+        <div class="stats">
+          <article><h3>99,1%</h3><p>SLA no prazo</p></article>
+          <article><h3>24/7</h3><p>Central de Suporte</p></article>
+          <article><h3>Ao vivo</h3><p>Atualizações em tempo real</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">Rastrear Envio</p>
+          <h2>Abra a página completa de rastreamento pelo ID</h2>
+          <p>Digite um ID de rastreamento para ver detalhes do pacote, eventos da linha do tempo e o mapa da rota.</p>
+        </div>
+        <form class="panel" id="home-track-form">
+          <label>Número de rastreamento
+            <input name="tracking_id" placeholder="FDX-260306-A12BCD34" required />
+          </label>
+          <button type="submit" class="btn">Rastrear pacote</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container section-head">
+        <p class="eyebrow">Como funciona</p>
+        <h2>Ciclo de vida completo da encomenda</h2>
+      </div>
+      <div class="container service-grid">
+        <article class="service-card">
+          <img src="static/images/fedex-online-1.jpg" alt="Operações da FedEx em Heathrow" />
+          <div>
+            <h3>Criar um envio</h3>
+            <p>Informe os dados do remetente e do destinatário e envie para gerar a etiqueta imediatamente.</p>
+          </div>
+        </article>
+        <article class="service-card">
+          <img src="static/images/fedex-online-2.jpg" alt="Caminhão da FedEx em serviço" />
+          <div>
+            <h3>Gerar ID de rastreamento</h3>
+            <p>O navegador armazena os dados do envio e cria um número de rastreamento exclusivo no estilo FedEx.</p>
+          </div>
+        </article>
+        <article class="service-card">
+          <img src="static/images/fedex-online-3.jpg" alt="Caminhões da FedEx na unidade" />
+          <div>
+            <h3>Atualizações do progresso de entrega</h3>
+            <p>Eventos de leitura automáticos e pontos de controle da rota mantêm os clientes informados da coleta à entrega final.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <p>© 2026 FedEx Logistics</p>
+      <p>Operações de envio, rastreamento e entrega</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
+
+
+
+
+

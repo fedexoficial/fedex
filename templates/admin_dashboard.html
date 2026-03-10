@@ -1,0 +1,100 @@
+﻿{% extends "base.html" %}
+{% block title %}{{ t('title.admin_dashboard', 'Painel do Admin | FedEx') }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container split">
+    <div class="panel">
+      <p class="eyebrow">{{ t('admin_dash.create_eyebrow', 'Operações - Criar envio') }}</p>
+      <h2>{{ t('admin_dash.create_title', 'Registrar pacote manualmente') }}</h2>
+      <form method="post" action="{{ url_for('admin_create_shipment') }}">
+        <div class="grid-two">
+          <label>{{ t('form.sender_name', 'Nome do remetente') }}<input name="sender_name" required /></label>
+          <label>{{ t('form.sender_email', 'Email do remetente') }}<input name="sender_email" type="email" /></label>
+          <label>{{ t('form.sender_phone', 'Telefone do remetente') }}<input name="sender_phone" /></label>
+          <label>{{ t('form.origin_label', 'Local de origem') }}<input name="origin_label" required placeholder="Berlim, Alemanha" /></label>
+          <label>{{ t('form.origin_lat', 'Latitude de origem') }}<input name="origin_lat" type="number" step="any" required /></label>
+          <label>{{ t('form.origin_lng', 'Longitude de origem') }}<input name="origin_lng" type="number" step="any" required /></label>
+          <label>{{ t('form.receiver_name', 'Nome do destinatário') }}<input name="receiver_name" required /></label>
+          <label>{{ t('form.receiver_email', 'Email do destinatário') }}<input name="receiver_email" type="email" /></label>
+          <label>{{ t('form.receiver_phone', 'Telefone do destinatário') }}<input name="receiver_phone" /></label>
+          <label>{{ t('form.destination_label', 'Local de destino') }}<input name="destination_label" required placeholder="Paris, França" /></label>
+          <label>{{ t('form.destination_lat', 'Latitude de destino') }}<input name="destination_lat" type="number" step="any" required /></label>
+          <label>{{ t('form.destination_lng', 'Longitude de destino') }}<input name="destination_lng" type="number" step="any" required /></label>
+          <label>{{ t('form.weight', 'Peso (kg)') }}<input name="weight_kg" type="number" min="0.1" step="0.1" required /></label>
+          <label>{{ t('form.service', 'Serviço') }}
+            <select name="service_level" required>
+              <option value="same-day">{{ t('service.same-day', 'Mesmo dia') }}</option>
+              <option value="express">{{ t('service.express', 'Expresso') }}</option>
+              <option value="standard">{{ t('service.standard', 'Padrão') }}</option>
+              <option value="international">{{ t('service.international', 'Internacional') }}</option>
+            </select>
+          </label>
+        </div>
+        <label>{{ t('form.package_description', 'Descrição da encomenda') }}<input name="package_description" required /></label>
+        <button type="submit" class="btn">{{ t('admin_dash.create_btn', 'Criar envio') }}</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <p class="eyebrow">{{ t('admin_dash.status_eyebrow', 'Operações - Atualizações de envio') }}</p>
+      <h2>{{ t('admin_dash.status_title', 'Alterar manualmente o status do pacote') }}</h2>
+      <form method="post" action="{{ url_for('admin_update_status') }}">
+        <label>{{ t('form.tracking_id', 'ID de rastreamento') }}<input name="tracking_id" required placeholder="FDX-260306-A1B2C3D4" /></label>
+        <label>{{ t('track.status', 'Status:') }}
+          <select name="status" required>
+            <option value="label-created">{{ t('status.label-created', 'Etiqueta criada') }}</option>
+            <option value="picked-up">{{ t('status.picked-up', 'Coletado') }}</option>
+            <option value="in-transit">{{ t('status.in-transit', 'Em trânsito') }}</option>
+            <option value="arrived-hub">{{ t('status.arrived-hub', 'Chegou ao hub') }}</option>
+            <option value="out-for-delivery">{{ t('status.out-for-delivery', 'Saiu para entrega') }}</option>
+            <option value="delivered">{{ t('status.delivered', 'Entregue') }}</option>
+            <option value="exception">{{ t('status.exception', 'Exceção na entrega') }}</option>
+          </select>
+        </label>
+        <label>{{ t('admin_dash.location', 'Localização') }}<input name="location_label" placeholder="Unidade de Chicago" /></label>
+        <label>{{ t('admin_dash.update_note', 'Nota de atualização') }}<input name="note" placeholder="Pacote escaneado na área de saída" /></label>
+        <button type="submit" class="btn">{{ t('admin_dash.apply', 'Aplicar atualização') }}</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{{ t('admin_dash.registered', 'Envios registrados') }}</p>
+      <h2>{{ t('admin_dash.latest', 'Pacotes mais recentes no backend') }}</h2>
+    </div>
+    <div class="panel table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ t('form.tracking_id', 'ID de rastreamento') }}</th>
+            <th>{{ t('world_map.from', 'De') }}</th>
+            <th>{{ t('world_map.to', 'Para') }}</th>
+            <th>{{ t('track.status', 'Status:') }}</th>
+            <th>{{ t('admin_dash.updated', 'Atualizado') }}</th>
+            <th>{{ t('admin_dash.tracking_page', 'Página de rastreamento') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in shipments %}
+            <tr>
+              <td>{{ item.tracking_id }}</td>
+              <td>{{ item.origin_label }}</td>
+              <td>{{ item.destination_label }}</td>
+              <td>{{ status_meta[item.status].label if item.status in status_meta else item.status }}</td>
+              <td>{{ item.updated_at_utc }}</td>
+              <td><a href="{{ url_for('track_page', tracking_id=item.tracking_id) }}">{{ t('admin_dash.open', 'Abrir') }}</a></td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6">{{ t('admin_dash.none', 'Nenhum envio ainda.') }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+

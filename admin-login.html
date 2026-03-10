@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login do Admin | FedEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body data-page="admin-login">
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Página inicial da FedEx">
+        <img class="brand-logo-png" src="static/images/fedex-logo.png" alt="Logo da FedEx" />
+      </a>
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="ship.html">Enviar Agora</a>
+        <a href="world-map.html">Mapa ao Vivo</a>
+</nav>
+</div>
+  </header>
+
+  <main>
+    <div class="container flash-wrap" id="flash-container"></div>
+    <section class="section">
+      <div class="container narrow">
+        <form class="panel" id="admin-login-form">
+          <p class="eyebrow">Acesso de Operações</p>
+          <h2>Entrar no console de operações</h2>
+          <label>Usuário<input name="username" required /></label>
+          <label>Senha<input name="password" type="password" required /></label>
+          <button type="submit" class="btn">Entrar</button>
+          <p class="hint">Credenciais padrão: <code>admin</code> / <code>admin</code>. Pressione <code>Ctrl + Shift + A</code> em qualquer página para abrir esta tela.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <p>© 2026 FedEx Logistics</p>
+      <p>Operações de envio, rastreamento e entrega</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+

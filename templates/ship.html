@@ -1,0 +1,41 @@
+﻿{% extends "base.html" %}
+{% block title %}{{ t('title.ship', 'Criar Envio | FedEx') }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container split">
+    <div>
+      <p class="eyebrow">{{ t('ship.eyebrow', 'Formulário de envio do usuário') }}</p>
+      <h2>{{ t('ship.title', 'Criar pacote e registrar no backend') }}</h2>
+      <p>{{ t('ship.desc', 'As coordenadas são necessárias para que a página de rastreamento renderize a rota no mapa da origem ao destino.') }}</p>
+    </div>
+    <form class="panel" method="post" action="{{ url_for('ship_submit') }}">
+      <div class="grid-two">
+        <label>{{ t('form.sender_name', 'Nome do remetente') }}<input name="sender_name" required /></label>
+        <label>{{ t('form.sender_email', 'Email do remetente') }}<input name="sender_email" type="email" /></label>
+        <label>{{ t('form.sender_phone', 'Telefone do remetente') }}<input name="sender_phone" /></label>
+        <label>{{ t('form.origin_label', 'Local de origem') }}<input name="origin_label" placeholder="Nova York, EUA" required /></label>
+        <label>{{ t('form.origin_lat', 'Latitude de origem') }}<input name="origin_lat" type="number" step="any" required /></label>
+        <label>{{ t('form.origin_lng', 'Longitude de origem') }}<input name="origin_lng" type="number" step="any" required /></label>
+        <label>{{ t('form.receiver_name', 'Nome do destinatário') }}<input name="receiver_name" required /></label>
+        <label>{{ t('form.receiver_email', 'Email do destinatário') }}<input name="receiver_email" type="email" /></label>
+        <label>{{ t('form.receiver_phone', 'Telefone do destinatário') }}<input name="receiver_phone" /></label>
+        <label>{{ t('form.destination_label', 'Local de destino') }}<input name="destination_label" placeholder="Toronto, Canadá" required /></label>
+        <label>{{ t('form.destination_lat', 'Latitude de destino') }}<input name="destination_lat" type="number" step="any" required /></label>
+        <label>{{ t('form.destination_lng', 'Longitude de destino') }}<input name="destination_lng" type="number" step="any" required /></label>
+        <label>{{ t('form.weight', 'Peso (kg)') }}<input name="weight_kg" type="number" min="0.1" step="0.1" required /></label>
+        <label>{{ t('form.service', 'Serviço') }}
+          <select name="service_level" required>
+            <option value="same-day">{{ t('service.same-day', 'Mesmo dia') }}</option>
+            <option value="express">{{ t('service.express', 'Expresso') }}</option>
+            <option value="standard">{{ t('service.standard', 'Padrão') }}</option>
+            <option value="international">{{ t('service.international', 'Internacional') }}</option>
+          </select>
+        </label>
+      </div>
+      <label>{{ t('form.package_description', 'Descrição da encomenda') }}<input name="package_description" required placeholder="Documentos, eletrônicos, roupas" /></label>
+      <button class="btn" type="submit">{{ t('ship.submit', 'Registrar envio') }}</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
